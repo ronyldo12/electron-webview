@@ -1,5 +1,11 @@
 # Electron webview
 
+```
+git clone git@github.com:ronyldo12/electron-webview.git
+cd electron-webview
+./create-app-linux-mint.sh youtube https://www.youtube.com/
+```
+
 ## COMMAND
 ```./create-app-linux-mint.sh APP_NAME APP_URL ICON```
 
