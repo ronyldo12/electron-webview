@@ -101,5 +101,6 @@ cp -rfp app.desktop ~/.local/share/applications/$APP_NAME.desktop
 cp -rfp app.desktop ~/Área\ de\ Trabalho/$APP_NAME.desktop
 
 electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/default.png --prune=true --out=release-builds
+check_error $? "você precisa instalar o electron-packager: npm -g electron-packager"
 
 print "instalado em: $APP_DIR/"
