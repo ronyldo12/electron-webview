@@ -2,7 +2,7 @@
 
 check_error(){
     if ! [ "$1" = "0" ]; then
-        print "$2"
+        print "\n\n\nERROR: $2\n\n"
         exit 1
     fi
 }
@@ -101,6 +101,6 @@ cp -rfp app.desktop ~/.local/share/applications/$APP_NAME.desktop
 cp -rfp app.desktop ~/Área\ de\ Trabalho/$APP_NAME.desktop
 
 electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/default.png --prune=true --out=release-builds
-check_error $? "you need to install electron-packager: npm -g electron-packager"
+check_error $? "you need to install electron-packager: npm install -g electron-packager"
 
 print "instalado em: $APP_DIR/"
