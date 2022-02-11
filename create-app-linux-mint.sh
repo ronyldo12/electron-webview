@@ -31,25 +31,31 @@ APP_DIR=$APP_ROOT_DIR
 APP_DIR="$APP_DIR$APP_NAME"
 
 if [ -z "$ICON" ]; then
-    ICON="$APP_DIR/assets/icons/default.png"
+    ICON="assets/icons/default.png"
 fi
 
+BUILD_DIR=/tmp/$APP_NAME
+
 mkdir -p $APP_DIR
+check_error $? "cannot create app dir $APP_DIR"
+mkdir -p $BUILD_DIR
+check_error $? "cannot create app build dir $BUILD_DIR"
 
-nvm install $APP_NODE_VERSION
-check_error $? "erro ao instalar o nodejs $APP_NODE_VERSION"
-nvm use $APP_NODE_VERSION
-check_error $? "erro ao utilizar versão do nodejs $APP_NODE_VERSION"
+# nvm install $APP_NODE_VERSION
+# check_error $? "error on install node $APP_NODE_VERSION"
+# nvm use $APP_NODE_VERSION
+# check_error $? "error on use node version $APP_NODE_VERSION"
+#npm install -g electron-packager
+#check_error $? "error on install electron-packager"
 
-npm install
-check_error $? "erro baixar pacote 'npm install'"
+# npm install
+# check_error $? "error on execute 'npm install'"
 
-cp -rfp ./ $APP_DIR/
+cp -rfp ./ $BUILD_DIR/
 check_error $? "erro ao copiar arquivos do app"
 
-cd $APP_DIR/ 
-check_error $? "erro ao mover para o diretorio $APP_DIR"
-
+cd $BUILD_DIR/ 
+check_error $? "erro ao mover para o diretorio $BUILD_DIR"
 
 if ! [[ "$ICON" == *.png ]]; then
      print "the icon file must be a .png file"
@@ -57,7 +63,8 @@ if ! [[ "$ICON" == *.png ]]; then
 fi
 
 if [[ "$ICON" =~ ^http* ]]; then
-    curl "$ICON" -o assets/icons/icon.png
+    echo "\n\nDownloading icon from internet: $ICON\n\n"
+    curl "$ICON" -o assets/icons/icon.png 1>/dev/null 2>/dev/null
     check_error $? "cannot download the icon $ICON"
 fi
 
@@ -65,21 +72,24 @@ if ! [[ "$ICON" =~ ^http* ]]; then
     cp -fp $ICON assets/icons/icon.png
 fi
 
-ICON="$APP_DIR/assets/icons/icon.png"
+ICON="assets/icons/icon.png"
 
-echo "Icon: $ICON"
+
 
 if ! [ -f "$ICON" ]; then
   print "icon file don't found: $ICON"
   exit 1
 fi
 
+ICON="$APP_DIR/$APP_NAME-linux-x64/resources/app/$ICON"
+
+echo "Icon: $ICON"
 
 APP_URL_SED=$(echo $APP_URL | sed 's/\//\\\//g')
 APP_DIR_SED=$(echo $APP_DIR | sed 's/\//\\\//g')
 ICON_SED=$(echo $ICON | sed 's/\//\\\//g')
 
-sed "s/{{APP_URL}}/$APP_URL_SED/g" -i index.html
+sed "s/{{APP_URL}}/$APP_URL_SED/g" -i main.js
 check_error $? "erro ao definir url no index.html"
 sed "s/{{APP_URL}}/$APP_URL_SED/g" -i src/view.js
 check_error $? "erro ao definir url no src/view.js"
@@ -100,7 +110,9 @@ check_error $? "erro ao definir icon do app no app.desktop"
 cp -rfp app.desktop ~/.local/share/applications/$APP_NAME.desktop
 cp -rfp app.desktop ~/Área\ de\ Trabalho/$APP_NAME.desktop
 
-electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/default.png --prune=true --out=release-builds
+electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/icon.png --prune=true --out=$APP_DIR/
 check_error $? "you need to install electron-packager: npm install -g electron-packager"
 
 print "instalado em: $APP_DIR/"
+
+

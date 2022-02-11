@@ -2,7 +2,7 @@
 Name={{APP_NAME}}
 Comment={{APP_NAME}}
 GenericName={{APP_NAME}}
-Exec={{APP_DIR}}/release-builds/{{APP_NAME}}-linux-x64/{{APP_NAME}}
+Exec={{APP_DIR}}/{{APP_NAME}}-linux-x64/{{APP_NAME}}
 Icon={{ICON}}
 Type=Application
 Categories=Network;
