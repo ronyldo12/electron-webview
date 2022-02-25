@@ -21,3 +21,6 @@ cd electron-webview
 
 ## REMOVE YOUTUBE MUSIC
 ```./remove-app-linux-mint.sh youtube-music```
+
+## YOUTUBE MUSIC MACOS
+```./create-app-linux-mac.sh youtube-music https://music.youtube.com/ /Users/ronyldo12/Downloads/youtube-music.icns```
